@@ -359,7 +359,7 @@ void Stats::setupTaskTime(QMap<QPair<int, int>, int> devTaskTime,
     ui->taskTimePlot->legend->setFont(legendFont);
     ui->taskTimePlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 
-    delete time;
+    delete[] time;
     delete[] times;
 }
 
@@ -470,7 +470,7 @@ void Stats::setupDevTime(QMap<QPair<int, int>, int> devTaskTime,
     ui->devTimePlot->legend->setFont(legendFont);
     ui->devTimePlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 
-    delete time;
+    delete[] time;
     delete[] times;
 }
 

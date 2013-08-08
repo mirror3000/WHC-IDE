@@ -63,7 +63,8 @@ SortTasks::SortTasks(Ide *parent, QVector<QPair<ExecNode, ExecNode> > data)
         nod2->link[tmp.second.conId].append(nod1);
     }
 
-    int time = 0, foundCycle;
+    int time = 0;
+    bool foundCycle;
 
     for(QMap<int, Node*>::Iterator it = graph.begin(); it != graph.end(); ++it)
     {
@@ -86,9 +87,9 @@ SortTasks::~SortTasks()
         delete execOrder.at(i);
 }
 
-int SortTasks::dfs(Node *nod, int &time)
+bool SortTasks::dfs(Node *nod, int &time)
 {
-    int foundCycle = 0;
+    bool foundCycle = false;
 
     nod->nodeColor = Node::Grey;
     time++;
@@ -102,7 +103,7 @@ int SortTasks::dfs(Node *nod, int &time)
         if(lst.at(i)->nodeColor == Node::White)
             foundCycle = dfs(lst.at(i), time);
         else if(lst.at(i)->nodeColor == Node::Grey)
-            foundCycle = 1;
+            foundCycle = true;
         if(foundCycle)
             break;
     }
@@ -114,4 +115,23 @@ int SortTasks::dfs(Node *nod, int &time)
     execOrder.append(nod);
 
     return foundCycle;
+}
+
+PriorityNode::PriorityNode(Node *x)
+    : node(x)
+{
+    inputs = 0;
+    for(int i = 0; i < node->link.size() - 1; i++)
+        inputs += node->link[i].size();
+}
+
+void PriorityNode::decrementInputs()
+{
+    if(inputs > 0)
+        inputs--;
+}
+
+int PriorityNode::getPriority() const
+{
+    return inputs;
 }

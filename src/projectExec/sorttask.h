@@ -22,6 +22,7 @@
  * ============================================================ */
 
 #include "ide.h"
+#include "priorityQueue/priorityqueue.h"
 #include "diagram/containers.h"
 #include <QList>
 #include <QPair>
@@ -53,6 +54,20 @@ public:
     }
 };
 
+class PriorityNode : public Prioritizable
+{
+public:
+    PriorityNode(Node *x);
+
+    Node *node;
+
+    void decrementInputs();
+    int getPriority() const;
+
+private:
+    int inputs;
+};
+
 class SortTasks
 {
 public:
@@ -81,9 +96,9 @@ private:
      * @brief dfs  - Dfs used for Topological Sort.
      * @param nod  - node to expand
      * @param time - time when node was discovered
-     * @return     - It returns 0 in case there is no cycle, 1 otherwise
+     * @return     - It returns true in case there is no cycle, false otherwise
      */
-    int dfs(Node *nod, int &time);
+    bool dfs(Node *nod, int &time);
 
     bool hasCycle;
     QMap<int, Node*> graph;
