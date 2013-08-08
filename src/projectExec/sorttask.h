@@ -21,6 +21,9 @@
  *
  * ============================================================ */
 
+#ifndef SORTTASK_H
+#define SORTTASK_H
+
 #include "ide.h"
 #include "priorityQueue/priorityqueue.h"
 #include "diagram/containers.h"
@@ -104,3 +107,5 @@ private:
     QMap<int, Node*> graph;
     QVector<Node*> execOrder;
 };
+
+#endif // SORTTASK_H
