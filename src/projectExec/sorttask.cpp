@@ -116,22 +116,3 @@ bool SortTasks::dfs(Node *nod, int &time)
 
     return foundCycle;
 }
-
-PriorityNode::PriorityNode(Node *x)
-    : node(x)
-{
-    inputs = 0;
-    for(int i = 0; i < node->link.size() - 1; i++)
-        inputs += node->link[i].size();
-}
-
-void PriorityNode::decrementInputs()
-{
-    if(inputs > 0)
-        inputs--;
-}
-
-int PriorityNode::getPriority() const
-{
-    return inputs;
-}

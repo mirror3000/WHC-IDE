@@ -33,6 +33,8 @@
 #include <QDir>
 #include <QLinkedList>
 #include <QTextStream>
+
+#include "priorityQueue/priorityqueue.h"
 #include "oneprocess.h"
 #include "monitor.h"
 
@@ -47,6 +49,23 @@ struct Exclusion
 {
     int taskId, taskStatus, moreInfo;
     QStringList inFiles;
+};
+
+class PriorityNode : public Prioritizable
+{
+public:
+    PriorityNode(Node *x);
+
+    Node *node;
+
+    void decrementInputs();
+    int getPriority() const;
+
+    /** The nodes that are dependent to this one **/
+    QVector<PriorityNode*> outLink;
+
+private:
+    int inputs;
 };
 
 class Execute : public QObject
@@ -85,7 +104,7 @@ signals:
 
 
 private:
-
+    void initExecVector(QVector<Node *> nodes);
     /**
      * @brief execute - prepare and execute tasks according to execOrder
      * @param order   - Execution Order, vector contains items sorted by
@@ -113,8 +132,8 @@ private:
     QString path;
     int taskIndex;
 
-    QQueue<QPair<Node*, QStringList> > q;
-    QVector<Node*> execOrder;
+    QQueue<QPair<Node *, QStringList> > q;
+    MinHeap execOrder;
     QVector<int> devices;
     QLinkedList<Exclusion> exclusions;
 

@@ -33,11 +33,32 @@
 #include "execute.h"
 #include "sorttask.h"
 
+PriorityNode::PriorityNode(Node *x)
+    : node(x)
+{
+    inputs = 0;
+    for(int i = 0; i < node->link.size() - 1; i++)
+        inputs += node->link[i].size();
+}
+
+void PriorityNode::decrementInputs()
+{
+    if(inputs > 0)
+        inputs--;
+}
+
+int PriorityNode::getPriority() const
+{
+    return inputs;
+}
+
 Execute::Execute(QString whcFile, QVector<Node*> sorted, QVector<int> devices,
                  Ide *parent, CommandLine *cmd,
-                 QLinkedList<Exclusion> exclusionList):execOrder(sorted),
-                 devices(devices), exclusions(exclusionList), cmd(cmd)
+                 QLinkedList<Exclusion> exclusionList): devices(devices),
+    exclusions(exclusionList), cmd(cmd)
 {
+    initExecVector(sorted);
+
     path = whcFile.remove(whcFile.split("/").last());
 
     if(parent->mustSaveFlow())
@@ -377,5 +398,29 @@ void Execute::start(int devId)
                 SIGNAL(signalEnd(int, int, QStringList *, int, int)),
                 this, SLOT(slotNextProcess(int, int, QStringList *, int, int)));
         exec2[devId]->startExecution();
+    }
+}
+
+
+void Execute::initExecVector(QVector<Node *> nodes)
+{
+    QVector<PriorityNode *> exec;
+    for(int i = 0; i < nodes.size(); i++)
+    {
+        exec << new PriorityNode(nodes[i]);
+        execOrder.insert((Prioritizable *)exec.last());
+    }
+    for(int i = 0; i < exec.size(); i++)
+    {
+        int outLinkIdx = exec[i]->node->link.size() - 1;
+        /**
+         * Iterates through all the outgoing nodes to add them as dependencies
+         * in the outLink vector.
+         */
+        for(int j = 0; j < exec[i]->node->link[outLinkIdx].size(); j++)
+            for(int k = 0; k < exec.size(); k++)
+                if(exec[k]->node == exec[i]->node->link[outLinkIdx][j] &&
+                   !exec[i]->outLink.contains(exec[k]))
+                    exec[i]->outLink << exec[k];
     }
 }

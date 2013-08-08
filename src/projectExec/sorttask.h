@@ -25,7 +25,6 @@
 #define SORTTASK_H
 
 #include "ide.h"
-#include "priorityQueue/priorityqueue.h"
 #include "diagram/containers.h"
 #include <QList>
 #include <QPair>
@@ -55,20 +54,6 @@ public:
         nodeColor = Node::White;
         done = false;
     }
-};
-
-class PriorityNode : public Prioritizable
-{
-public:
-    PriorityNode(Node *x);
-
-    Node *node;
-
-    void decrementInputs();
-    int getPriority() const;
-
-private:
-    int inputs;
 };
 
 class SortTasks

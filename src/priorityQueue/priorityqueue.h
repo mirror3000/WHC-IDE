@@ -20,6 +20,9 @@ public:
     void insert(Prioritizable *x);
     Prioritizable *pop();
     Prioritizable *peek();
+    void heapify();
+    bool isEmpty();
+    int size();
 private:
     QVector<Prioritizable *> *data;
 

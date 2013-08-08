@@ -13,9 +13,7 @@ MinHeap::MinHeap(const QVector<Prioritizable *> &data)
 MinHeap::MinHeap(const MinHeap &other)
 {
     data = new QVector<Prioritizable *>(*(other.data));
-
-    for(int i = 0; i < data->size(); i++)
-        pushUp(i);
+    heapify();
 }
 
 MinHeap::~MinHeap()
@@ -49,6 +47,22 @@ Prioritizable *MinHeap::peek()
     if(data->size() == 0)
         return NULL;
     return data->first();
+}
+
+void MinHeap::heapify()
+{
+    for(int i = 0; i < data->size(); i++)
+        pushUp(i);
+}
+
+bool MinHeap::isEmpty()
+{
+    return data->isEmpty();
+}
+
+int MinHeap::size()
+{
+    return data->size();
 }
 
 void MinHeap::pushUp(int i)
