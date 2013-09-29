@@ -16,6 +16,8 @@ Name: "{app}\Global_settings\settings"
 Source: "IDE.exe"; DestDir: "{app}";
 Source: "Qt5Core.dll"; DestDir: "{app}";
 Source: "Qt5Core.lib"; DestDir: "{app}";
+Source: "Qt5Gui.dll"; DestDir: "{app}";
+Source: "Qt5Gui.lib"; DestDir: "{app}";
 Source: "Qt5Network.dll"; DestDir: "{app}";
 Source: "Qt5Network.lib"; DestDir: "{app}";
 Source: "Qt5PrintSupport.dll"; DestDir: "{app}";
